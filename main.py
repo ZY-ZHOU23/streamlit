@@ -6,8 +6,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-
-
 st.title("Streamlit Application for Data Analysis")
 
 # Initialize data as an empty DataFrame
@@ -16,7 +14,7 @@ data = pd.DataFrame()
 # 1. File uploader
 uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 
-# Check if data is not empty
+# Check if uploaded_file is not empty
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
 
@@ -31,7 +29,7 @@ if uploaded_file is not None:
     # 3. Select columns
     selected_columns = st.multiselect("Select columns", data.columns.tolist())
 
-    # Check if a column has been selected
+    # Check if at least one column has been selected
     if selected_columns is not None:
         for selected_column in selected_columns:
             st.subheader(f"Selected Column: {selected_column}")
@@ -50,11 +48,12 @@ if uploaded_file is not None:
                 st.pyplot(fig)
                 
             # 5. If categorical, display proportions and barplot
-            elif np.issubdtype(data[selected_column].dtype, np.object):
+            elif np.issubdtype(data[selected_column].dtype, object):
                 st.write("Category Proportions")
-                st.write(data[selected_column].value_counts(normalize=True))
+                proportions = data[selected_column].value_counts(normalize=True)
+                st.write(proportions)
 
                 fig, ax = plt.subplots()
-                sns.countplot(data[selected_column], ax=ax)
+                sns.barplot(x= proportions.index, y= proportions.values, ax=ax)
                 ax.set(title = f"Bar plot for {selected_column}")
                 st.pyplot(fig)
