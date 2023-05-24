@@ -11,3 +11,7 @@ side_check = st.sidebar.checkbox('Click Me')
 if side_check:
     st.sidebar.write('Hello')
 
+
+
+# pip freeze > requirements.txt
+# deactivate 
